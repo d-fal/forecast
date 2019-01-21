@@ -16,7 +16,14 @@
 #ifndef Settings_H_
 #define Settings_H_
 
-#include <gtkmm.h>
+#include <gtkmm/grid.h>
+#include <gtkmm/checkbutton.h>
+#include <gtkmm/label.h>
+#include <gtkmm/radiobutton.h>
+#include <gtkmm/box.h>
+#include <gtkmm/applicationwindow.h>
+
+
 #include <string>
 #include "db.h"
 

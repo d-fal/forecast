@@ -158,7 +158,7 @@ bool Cities::on_key_press(GdkEventKey *event)
     Gtk::TreeModel::Row row;
 
     std::map<std::string, std::string> map_suggestions;
-    map_suggestions = dbInstance->select_from_db(this, "Cities", "id , name, country", m_Entry.get_text().c_str());
+    map_suggestions = dbInstance->select_from_db("Cities", "id , name, country", m_Entry.get_text().c_str());
 
     for (const auto &pairs : map_suggestions)
     {

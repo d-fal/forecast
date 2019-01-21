@@ -19,7 +19,8 @@
 #ifndef SKELETON_APPLICATION_H
 #define SKELETON_APPLICATION_H
 
-#include <gtkmm.h>
+
+#include <gtkmm/application.h>
 #include "mainapp.h"
 #include "db.h"
 #include "settings.h"

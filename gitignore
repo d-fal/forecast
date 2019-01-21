@@ -1,0 +1,7 @@
+*.o
+*.gz
+*.json
+*.db
+*.compiled
+forecast
+test

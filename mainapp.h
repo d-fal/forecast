@@ -19,7 +19,10 @@
 #define SEC_IN_MILLISECONDS 1000
 #define ITEM_NOT_SELECTED -1
 
-#include <gtkmm.h>
+#include <gtkmm/stack.h>
+#include <gtkmm/treemodel.h>
+#include <gtkmm/box.h>
+#include <gtkmm/applicationwindow.h>
 #include "canvas.h"
 #include <thread>
 #include <mutex>

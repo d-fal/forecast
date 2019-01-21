@@ -19,7 +19,10 @@
 #ifndef GTKMM_EXAMPLE_TREEVIEW_WITHPOPUP_H
 #define GTKMM_EXAMPLE_TREEVIEW_WITHPOPUP_H
 
-#include <gtkmm.h>
+#include <gtkmm/treeview.h>
+#include <gtkmm/treemodel.h>
+#include <gtkmm/menu.h>
+#include <gtkmm/liststore.h>
 #include "db.h"
 
 class TreeView_WithPopup : public Gtk::TreeView

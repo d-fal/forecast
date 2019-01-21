@@ -1,6 +1,7 @@
 #include "skeleteonapplication.h"
 #include <gtkmm/application.h>
 
+
 int main (int argc, char *argv[])
 {
   // Since this example is running uninstalled, we have to help it find its

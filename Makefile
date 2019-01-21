@@ -51,9 +51,6 @@ clean:
 	
 
 
-
-
-
 resource.download:
 
 ifneq ("$(wildcard $(RESOURCES_FILE_NAME))","")

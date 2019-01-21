@@ -1,6 +1,7 @@
 #include "constants.h"
 #include <iostream>
 #include <regex>
+
 using namespace std;
 
 Constants *Constants::instance = UNINTIALIZED_INSTANCE;

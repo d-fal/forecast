@@ -2,7 +2,10 @@
 #define GTKMM_EXAMPLE_CANVAS_H
 
 #define TRIANGLE_EDGE_LENGTH 10
-#include <gtkmm.h>
+#include <gtkmm/drawingarea.h>
+#include <cairomm/context.h>
+#include <gdkmm/rgba.h>
+
 #include <vector>
 #include "constants.h"
 #include <string>

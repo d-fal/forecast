@@ -1,6 +1,8 @@
 #include "settings.h"
 #include "constants.h"
 
+
+
 Settings::Settings() : l_autoUpdateEnableLabel("Enable automatic update"),
                        l_degreeSystem("Degrees shown as"),
                        r_fahrenheit("Fahrenheit"),

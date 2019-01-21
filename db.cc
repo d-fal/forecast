@@ -1,6 +1,5 @@
 #include "db.h"
 #include <stdio.h>
-#include "cities.h"
 #include <stdexcept>
 
 
@@ -43,9 +42,8 @@ int Db::callback(void *data, int argc, char **argv, char **azColName)
                                                                         std::string(argv[i + 1]) +
                                                                             " | " +
                                                                             std::string(argv[i + 2])));
-        i += 2;
+        i += 2; // We put 2 items in a row
     }
-    // printf("\n");
     return 0;
 }
 
@@ -57,7 +55,6 @@ void Db::open()
         fprintf(stderr, "SQL error: %s\n", zErrMsg);
         sqlite3_free(zErrMsg);
     }
-    /* Create SQL statement */
 }
 
 void Db::setup_db()
@@ -94,7 +91,6 @@ void Db::setup_db()
               "status)"
               "VALUES (1, 'cities_loaded', 0)"
               ";");
-    // sqlite3_close(db);
 }
 
 int Db::exec(const char *query)
@@ -138,7 +134,7 @@ void Db::update_status(const char *statusName, bool status)
     exec(query.c_str());
 }
 
-std::map<std::string, std::string> Db::select_from_db(Cities *instance, const char *dbName, const char *params, const char *whereClause)
+std::map<std::string, std::string> Db::select_from_db(const char *dbName, const char *params, const char *whereClause)
 {
     map_suggestions.clear();
     std::string query;
@@ -198,9 +194,8 @@ std::map<std::string, std::string> Db::select_picked_cities_from_db(const char *
             std::string(dbName) +
             " as A inner join Cities as B ON (A.city_id = B.id) order by B.name";
 
-    const char *data = "Callback function called";
-    /* Execute SQL statement */
-    rc = sqlite3_exec(db, query.c_str(), callback, (void *)data, &zErrMsg);
+
+    rc = sqlite3_exec(db, query.c_str(), callback,NULL, &zErrMsg);
 
     if (rc != SQLITE_OK)
     {

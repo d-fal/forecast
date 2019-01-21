@@ -19,9 +19,18 @@ size_t ForecastAPI::write_response(void *ptr, size_t size, size_t nmemb, std::st
 void ForecastAPI::make_post_request(MainApp *instance, const char *url)
 {
 
+    std::map<std::string, std::vector<std::string>> map_result;
+    make_post_request(url, map_result);
+    instance->notify_update_map(map_result);
+}
+
+void ForecastAPI::make_post_request(const char *url,
+                                    std::map<std::string,
+                                             std::vector<std::string>> &map_result)
+{
     std::string data;
     auto curl = curl_easy_init();
-    std::map<std::string, std::vector<std::string>> map_result;
+
     std::vector<std::string> _vec;
 
     if (curl)
@@ -74,6 +83,7 @@ void ForecastAPI::make_post_request(MainApp *instance, const char *url)
                     _vec.push_back(convertedCitiesArray[index]["weather"][0]["icon"].asString());        // Index: 6
                     _vec.push_back(convertedCitiesArray[index]["main"]["humidity"].asString());          // Index: 7
                     _vec.push_back(convertedCitiesArray[index]["clouds"]["all"].asString());             // Index: 8
+                 
 
                     map_result.insert(
                         std::pair<std::string, std::vector<std::string>>(convertedCitiesArray[index]["dt"].asString(), _vec));
@@ -85,8 +95,6 @@ void ForecastAPI::make_post_request(MainApp *instance, const char *url)
                     cout << "error: " << e.what();
                 }
             }
-
-            instance->notify_update_map(map_result);
         }
         catch (...)
         {

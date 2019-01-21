@@ -44,7 +44,7 @@ MainApp::MainApp(BaseObjectType *cobject,
 
   m_Combo.signal_changed().connect(sigc::mem_fun(*this, &MainApp::combo_selection_changed));
 
-  Glib::signal_timeout().connect(sigc::mem_fun(*this, &MainApp::on_timeout), 300);
+  Glib::signal_timeout().connect(sigc::mem_fun(*this, &MainApp::on_timeout), 1000);
   Glib::signal_timeout().connect(sigc::mem_fun(*this, &MainApp::auto_update_map), autoUpdateInterval * SEC_IN_MILLISECONDS);
   /**
    * Releasing the cache every 1 hour
