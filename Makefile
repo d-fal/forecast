@@ -41,32 +41,16 @@ resources.c: forecast.gresource.xml $(shell $(GLIB_COMPILE_RESOURCES) --sourcedi
 
 
 $(PROGRAM): $(OBJS)
-ifneq ("$(wildcard $(BIN_FOLDER))","")
-	
-else
-	@mkdir -p $(BIN_FOLDER)
-endif
-	$(CXX) -o "./bin/$(PROGRAM)" $(OBJS) $(LIBS) $(LDFLAGS)
+	$(CXX) -o "$(PROGRAM)" $(OBJS) $(LIBS) $(LDFLAGS)
 
 clean:
 	rm -f gschemas.compiled
 	rm -f $(BUILT_SRC)
 	rm -f $(OBJS)
 	rm -f $(PROGRAM)
-	rm -rf $(BIN_FOLDER)
+	
 
-install-desktop-file:
-	@mkdir -p ~/.local/share/applications
-	sed -e "s#@bindir@#$$PWD#" ../step1/exampleapp.desktop > ~/.local/share/applications/$(PROGRAM).desktop
-	@mkdir -p ~/.local/share/icons/hicolor/48x48/apps
-	cp ../step1/exampleapp.png ~/.local/share/icons/hicolor/48x48/apps
 
-install-gschema-file:
-	if test -n "$(GSETTINGS_SCHEMA_DIR)" -a "$(GSETTINGS_SCHEMA_DIR)" != .; then \
-		mkdir -p "$(GSETTINGS_SCHEMA_DIR)"; \
-		cp org.gtkmm.exampleapp.gschema.xml "$(GSETTINGS_SCHEMA_DIR)"; \
-		$(GLIB_COMPILE_SCHEMAS) "$(GSETTINGS_SCHEMA_DIR)"; \
-	fi
 
 
 

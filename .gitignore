@@ -1,4 +1,5 @@
-bin/
+forecast
+*.compiled
 *.o
 *.json
 *.gz
