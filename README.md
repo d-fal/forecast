@@ -29,7 +29,7 @@ git clone https://github.com/falahati1987/forecast
 cd forecast
 make -f Makefile
 ```
-Now, you can run it by ```./forecast```
+Now, you can run it by ```./bin/forecast```
 
 # Snapshot
 ![alt text](https://github.com/falahati1987/forecast/blob/master/demo.png)
