@@ -11,6 +11,7 @@ LDFLAGS = -ljsoncpp -lpthread -lsqlite3 -lcurl
 LIBS = `pkg-config --libs gtkmm-3.0`
 GLIB_COMPILE_RESOURCES = $(shell pkg-config --variable=glib_compile_resources gio-2.0)
 GLIB_COMPILE_SCHEMAS   = $(shell pkg-config --variable=glib_compile_schemas gio-2.0)
+BIN_FOLDER = bin
 RESOURCES_FILE_NAME = city.list.json
 
 all: $(PROGRAM) gschemas.compiled resource.download
@@ -40,13 +41,19 @@ resources.c: forecast.gresource.xml $(shell $(GLIB_COMPILE_RESOURCES) --sourcedi
 
 
 $(PROGRAM): $(OBJS)
-	$(CXX) -o $(PROGRAM) $(OBJS) $(LIBS) $(LDFLAGS)
+ifneq ("$(wildcard $(BIN_FOLDER))","")
+	
+else
+	@mkdir -p $(BIN_FOLDER)
+endif
+	$(CXX) -o "./bin/$(PROGRAM)" $(OBJS) $(LIBS) $(LDFLAGS)
 
 clean:
 	rm -f gschemas.compiled
 	rm -f $(BUILT_SRC)
 	rm -f $(OBJS)
 	rm -f $(PROGRAM)
+	rm -rf $(BIN_FOLDER)
 
 install-desktop-file:
 	@mkdir -p ~/.local/share/applications
@@ -66,14 +73,14 @@ install-gschema-file:
 resource.download:
 
 ifneq ("$(wildcard $(RESOURCES_FILE_NAME))","")
-	#echo "$(RESOURCES_FILE_NAME) already exists"
+#echo "$(RESOURCES_FILE_NAME) already exists"
 else
-	#echo "$(RESOURCES_FILE_NAME) does not exist"
+#echo "$(RESOURCES_FILE_NAME) does not exist"
 ifneq ("$(wildcard $(RESOURCES_FILE_NAME).gz )","")
-	#echo "$(RESOURCES_FILE_NAME).gz already exists"
+#echo "$(RESOURCES_FILE_NAME).gz already exists"
 	gunzip -f "$(RESOURCES_FILE_NAME).gz"
 else 
-	#echo "Downloading the file"
+#echo "Downloading the file"
 	wget http://bulk.openweathermap.org/sample/city.list.json.gz -O "$(RESOURCES_FILE_NAME).gz"
 	gunzip -f "$(RESOURCES_FILE_NAME).gz"
 endif

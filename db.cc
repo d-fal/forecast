@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include "cities.h"
 #include <stdexcept>
-#include "constants.h"
+
 
 bool Db::isCitiesLoaded = true;
 std::map<std::string, std::string> Db::map_suggestions;
@@ -113,7 +113,7 @@ int Db::exec(const char *query)
  * The @var values are generated so that it can be inserted easily into db
  * 
  * */
-int Db::insert_in_db(const char *dbName, const char *values)
+ErrorCodes Db::insert_in_db(const char *dbName, const char *values)
 {
     std::string query;
     try
@@ -124,10 +124,10 @@ int Db::insert_in_db(const char *dbName, const char *values)
     }
     catch (const std::logic_error &e)
     {
-        return int(Constants::ErrorCodes::DATA_INSERTION_ERROR);
+        return DATA_INSERTION_ERROR;
         std::cout << e.what();
     }
-    return int(Constants::ErrorCodes::NO_ERROR);
+    return NO_ERROR;
 }
 
 void Db::update_status(const char *statusName, bool status)

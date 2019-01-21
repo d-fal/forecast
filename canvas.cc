@@ -40,8 +40,8 @@ bool Canvas::on_draw(const Cairo::RefPtr<Cairo::Context> &cr)
   Gtk::Allocation allocation = get_allocation();
   const int width = allocation.get_width();
   const int height = allocation.get_height();
-
   draw_grid(cr, width, height);
+
   return true;
 }
 /**
@@ -59,33 +59,35 @@ void Canvas::draw_grid(const Cairo::RefPtr<Cairo::Context> &cr, int width, int h
 
   time_t rawtime;
   struct tm *ptm;
+  int pos_center = height >> 1;
   int lastPrintedDay = -1;
   int numberOfDaysToCover = 5;
   int incrementBy = width / numberOfDaysToCover;
   int standardImageWidth;
   GdkRGBA rgbMap, rgbContrast, rgbRed, rgbBlue;
-  int tempMax, tempMin, temp, _tempMax = INT_MIN, _tempMin = INT_MAX;
+  int tempMax, tempMin, temp, _tempMax = INT_MIN, _tempMin = INT_MAX, _temp = 0;
 
-  int pos_temp = int(height / 2);
-  int pos_tempMin = int(height / 2 + 30);
-  int pos_tempMax = int(height / 2 - 30);
+  int pos_temp = pos_center;
+  int pos_tempMin = pos_center + 30;
+  int pos_tempMax = pos_center - 30;
   int pos_weatherCondition = int(height - 20);
   int pos_weatherConditionDescription = int(height - 10);
-  int pos_triangleUp = height / 2 - 15;
-  int pos_triangleDown = height / 2 + 15;
-  int pos_date = height / 2 - 60;
-  int pos_humidity = height / 2 + 50;
-  int pos_cityName = height / 2 - 100;
-  int pos_cloudiness = height/2 +70;
+  int pos_triangleUp = pos_center - 15;
+  int pos_triangleDown = pos_center + 15;
+  int pos_date = pos_center - 60;
+  int pos_humidity = pos_center + 50;
+  int pos_cityName = pos_center - 100;
+  int pos_cloudiness = pos_center + 70;
   char dateString[50];
+  int samplesCount = 1;
 
-  rgbRed.red = .9;
-  rgbRed.green = 0;
-  rgbRed.blue = 0;
+  rgbRed = {.red = .9,
+            .green = 0,
+            .blue = 0};
 
-  rgbBlue.red = .1;
-  rgbBlue.green = 0;
-  rgbBlue.blue = .9;
+  rgbBlue = {.red = .1,
+             .green = 0,
+             .blue = .9};
 
   isBusy = true;
   Constants::getInstance()->get_standard_resource_width(standardImageWidth);
@@ -96,12 +98,13 @@ void Canvas::draw_grid(const Cairo::RefPtr<Cairo::Context> &cr, int width, int h
 
       rawtime = (time_t)std::stoi(it.second[0]);
       ptm = localtime(&rawtime);
-      convert_temperature(it.second[3], tempMax);
-      convert_temperature(it.second[2], tempMin);
-
+      Constants::getInstance()->convert_temperature(it.second[3], tempMax);
+      Constants::getInstance()->convert_temperature(it.second[2], tempMin);
+      Constants::getInstance()->convert_temperature(it.second[1], temp);
+      _temp += temp;
       _tempMax = tempMax > _tempMax ? tempMax : _tempMax;
       _tempMin = tempMin < _tempMin ? tempMin : _tempMin;
-
+      samplesCount++;
       if (ptm->tm_mday == lastPrintedDay)
         continue;
 
@@ -117,9 +120,8 @@ void Canvas::draw_grid(const Cairo::RefPtr<Cairo::Context> &cr, int width, int h
       draw_text(cr, it.second[4], pos_x + incrementBy / 2, pos_weatherCondition, 14);
       draw_text(cr, it.second[5], pos_x + incrementBy / 2, pos_weatherConditionDescription, 8);
 
-      convert_temperature(it.second[1], temp);
-
-      draw_text(cr, temp, pos_x + incrementBy / 2, pos_temp, 16);
+      draw_text(cr, std::to_string(_temp / samplesCount) + Constants::getInstance()->get_selected_temperature_symbol(),
+                pos_x + incrementBy / 2, pos_temp, 16);
       draw_text(cr, _tempMax, pos_x + incrementBy / 2, pos_tempMax, 10);
       draw_text(cr, _tempMin, pos_x + incrementBy / 2, pos_tempMin, 10);
 
@@ -127,7 +129,7 @@ void Canvas::draw_grid(const Cairo::RefPtr<Cairo::Context> &cr, int width, int h
       draw_text(cr, dateString, pos_x + incrementBy / 2, pos_date, 12);
 
       draw_text(cr, "Humidity: " + it.second[7] + "%", pos_x + incrementBy / 2, pos_humidity, 12);
-      draw_text(cr, "Cloudiness: " + it.second[8] + "%", pos_x + incrementBy / 2, pos_cloudiness, 12);
+      draw_text(cr, "Cloudiness: " + it.second[8] + "%", pos_x + incrementBy / 2, pos_cloudiness, 10);
       draw_text(cr, cityName, width / 2, pos_cityName, 20);
 
       cr->set_source_rgba(rgbRed.red, rgbRed.green, rgbRed.blue, .9);
@@ -145,6 +147,8 @@ void Canvas::draw_grid(const Cairo::RefPtr<Cairo::Context> &cr, int width, int h
       {
         _tempMax = INT_MIN;
         _tempMin = INT_MAX;
+        _temp = 0;
+        samplesCount = 1;
       }
       lastPrintedDay = (int)ptm->tm_mday;
     }
@@ -253,20 +257,6 @@ void Canvas::get_contrast_color(const GdkRGBA &rgbMap, GdkRGBA &rgbaInstance)
   rgbaInstance.red = 1.f - rgbMap.red;
   rgbaInstance.blue = 1.f - rgbMap.blue;
   rgbaInstance.green = 0;
-}
-
-void Canvas::convert_temperature(std::string temp, int &converetdTemp)
-{
-  try
-  {
-    float _temp = std::stof(temp);
-    converetdTemp = int(_temp - 273.f);
-  }
-  catch (...)
-  {
-    std::exception_ptr p = std::current_exception();
-    std::clog << (p ? p.__cxa_exception_type()->name() : "null") << std::endl;
-  }
 }
 
 bool Canvas::check_is_available()

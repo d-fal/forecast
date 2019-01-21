@@ -26,11 +26,14 @@ class Settings : public Gtk::ApplicationWindow
     Settings();
     ~Settings();
 
+    void on_check_auto_update_clicked();
+
   private:
     Gtk::Grid g_grid;
     Gtk::CheckButton m_checkAutoUpdate;
-    Gtk::Entry e_autoUpdateInterval, e_cacheUpdateInterval;
-    Gtk::Label l_autoUpdateEnableLabel,l_autoUpdateLabel, l_catchUpdateIntervalLabel;
+    Gtk::Label l_autoUpdateEnableLabel, l_degreeSystem;
+    Gtk::RadioButton r_fahrenheit, r_celcius;
+    Gtk::Box g_radioGroup;
 };
 
 #endif /* SETTINGS_H */

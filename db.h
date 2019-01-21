@@ -7,7 +7,7 @@
 #include <gtkmm.h>
 #include <string>
 #include "jsonparser.h"
-
+#include "constants.h"
 
 class Cities;
 
@@ -19,7 +19,7 @@ public:
   static Db *getInstance();
   
   void notify(std::map<Glib::ustring, Glib::ustring> vec_Cities);
-  int insert_in_db(const char *dbName, const char *values);
+  ErrorCodes insert_in_db(const char *dbName, const char *values);
   void update_status(const char *statusName, bool status);
   static int callback(void *data, int argc, char **argv, char **azColName);
   void delete_selected_city(int &id);

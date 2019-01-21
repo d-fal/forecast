@@ -15,7 +15,9 @@ Constants *Constants::getInstance()
     return instance;
 }
 
-Constants::Constants()
+Constants::Constants() : chosenTemperature(CELCIUS),
+                         dynamicUpdateContinue(true),
+                         showAllDataAtOnce(false)
 {
 
     double max_ = 255.f;
@@ -39,7 +41,6 @@ Constants::Constants()
     map_WeatherThemes.insert(pair<std::string, GdkRGBA>("13", *rgba13.gobj()));
     map_WeatherThemes.insert(pair<std::string, GdkRGBA>("50", *rgba50.gobj()));
 
-    
     // Loading the icons that will be used frequently
     for (auto it = vec_WeatherConditions.begin(); it != vec_WeatherConditions.end(); ++it)
     {
@@ -98,7 +99,7 @@ Glib::RefPtr<Gdk::Pixbuf> Constants::get_image_pointer_by_keyword(std::string ke
     std::smatch discoveredPattern;
     if (std::regex_match(keyword, discoveredPattern, findNumberPattern))
     {
-        return map_Images[std::string(discoveredPattern[1])+"d"];
+        return map_Images[std::string(discoveredPattern[1]) + "d"];
     }
     return map_Images[keyword];
 }
@@ -109,9 +110,74 @@ void Constants::get_url_by_city_id(std::string &url, const int &id)
           std::to_string(id) +
           "&appid=" + apiKey;
 }
-
-void Constants::get_standard_resource_width(int& width)
+void Constants::convert_temperature(std::string temp, int &convertedTemp)
+{
+    try
+    {
+        float _temp = std::stof(temp);
+        convertedTemp = int(_temp - 273.f);
+        switch (chosenTemperature)
+        {
+        case CELCIUS:
+            break;
+        case FAHRENHEIT:
+            convertedTemp = convertedTemp * 1.8 + 32;
+            break;
+        default:
+            break;
+        }
+    }
+    catch (...)
+    {
+        std::exception_ptr p = std::current_exception();
+        std::clog << (p ? p.__cxa_exception_type()->name() : "null") << std::endl;
+    }
+}
+std::string Constants::get_selected_temperature_symbol()
+{
+    switch (chosenTemperature)
+    {
+    case CELCIUS:
+        return "°C";
+        break;
+    case FAHRENHEIT:
+        return "°F";
+        break;
+    default:
+        break;
+    }
+    return "";
+}
+void Constants::get_standard_resource_width(int &width)
 {
     width = WIDTH_OF_WEATHER_CONDITION_ICON;
 }
 
+bool Constants::get_dynamic_update_status()
+{
+    
+    return dynamicUpdateContinue;
+}
+void Constants::set_dynamic_update_status(bool status)
+{
+    
+    dynamicUpdateContinue = status;
+}
+
+bool Constants::get_show_all_data_consent()
+{
+    return showAllDataAtOnce;
+}
+void Constants::set_show_all_data_consent(bool status)
+{
+    showAllDataAtOnce = status;
+}
+
+TemperatureSystems Constants::get_chosen_temprature()
+{
+    return chosenTemperature;
+}
+void Constants::set_temprature(TemperatureSystems temp)
+{
+    chosenTemperature = temp;
+}

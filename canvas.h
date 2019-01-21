@@ -54,7 +54,7 @@ private:
   int animation_position;
   int city_id;
   std::map<std::string, std::vector<std::string>> map_result;
-  void convert_temperature(std::string temp, int &converetdTemp);
+  
   std::string cityName;
   bool isBusy;
 };

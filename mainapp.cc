@@ -20,15 +20,15 @@
 using namespace std;
 
 MainApp::MainApp(BaseObjectType *cobject,
-                                   const Glib::RefPtr<Gtk::Builder> &refBuilder) : Gtk::ApplicationWindow(cobject),
-                                                                                   m_refBuilder(refBuilder),
-                                                                                   m_settings(),
-                                                                                   m_stack(nullptr),
-                                                                                   m_VBox(Gtk::ORIENTATION_VERTICAL, 0),
-                                                                                   offset(0),
-                                                                                   direction(1),
-                                                                                   continueAnimate(true),
-                                                                                   autoUpdateInterval(10)
+                 const Glib::RefPtr<Gtk::Builder> &refBuilder) : Gtk::ApplicationWindow(cobject),
+                                                                 m_refBuilder(refBuilder),
+                                                                 m_settings(),
+                                                                 m_stack(nullptr),
+                                                                 m_VBox(Gtk::ORIENTATION_VERTICAL, 0),
+                                                                 offset(0),
+                                                                 direction(1),
+                                                                 continueAnimate(true),
+                                                                 autoUpdateInterval(10)
 {
   m_refBuilder->get_widget("stack", m_stack);
   if (!m_stack)
@@ -134,6 +134,7 @@ void MainApp::notify_update_map(std::map<std::string, std::vector<std::string>> 
   }
   if (map_result.size() > 0)
   {
+
     m_Drawing->set_input_param(map_result, cityId, cityName);
     m_Drawing->show();
 
@@ -210,23 +211,24 @@ void MainApp::combo_selection_changed()
 
 bool MainApp::auto_update_map()
 {
-
-  if (selectedIndex >= int(citiesList.size()) - 1)
-    selectedIndex = ITEM_NOT_SELECTED;
-
-  for (auto const &it : citiesList)
+  if (Constants::getInstance()->get_dynamic_update_status())
   {
+    if (selectedIndex >= int(citiesList.size()) - 1)
+      selectedIndex = ITEM_NOT_SELECTED;
 
-    if (selectedIndex == ITEM_NOT_SELECTED || selectedIndex < it.first)
+    for (auto const &it : citiesList)
     {
-      cityId = it.second.begin()->first;
-      cityName = it.second.begin()->second;
-      call_forecast_api(cityName, cityId);
-      selectedIndex = it.first;
-      break;
+
+      if (selectedIndex == ITEM_NOT_SELECTED || selectedIndex < it.first)
+      {
+        cityId = it.second.begin()->first;
+        cityName = it.second.begin()->second;
+        call_forecast_api(cityName, cityId);
+        selectedIndex = it.first;
+        break;
+      }
     }
   }
-
   return true;
 }
 
