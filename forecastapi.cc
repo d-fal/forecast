@@ -18,19 +18,18 @@ size_t ForecastAPI::write_response(void *ptr, size_t size, size_t nmemb, std::st
 }
 void ForecastAPI::make_post_request(MainApp *instance, const char *url)
 {
-
+    int errorCode;
     std::map<std::string, std::vector<std::string>> map_result;
-    make_post_request(url, map_result);
+    make_post_request(url, map_result, errorCode);
     instance->notify_update_map(map_result);
 }
 
 void ForecastAPI::make_post_request(const char *url,
-                                    std::map<std::string,
-                                             std::vector<std::string>> &map_result)
+                                    std::map<std::string, std::vector<std::string>> &map_result,
+                                    int &errorCode)
 {
     std::string data;
     auto curl = curl_easy_init();
-
     std::vector<std::string> _vec;
 
     if (curl)
@@ -47,18 +46,9 @@ void ForecastAPI::make_post_request(const char *url,
             curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_response);
             curl_easy_setopt(curl, CURLOPT_WRITEDATA, &data);
             curl_easy_setopt(curl, CURLOPT_HEADERDATA, &header_string);
-            char *url2;
-            long response_code;
-            double elapsed;
-            curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &response_code);
-            curl_easy_getinfo(curl, CURLINFO_TOTAL_TIME, &elapsed);
-            curl_easy_getinfo(curl, CURLINFO_EFFECTIVE_URL, &url2);
-
             curl_easy_perform(curl);
             curl_easy_cleanup(curl);
             curl = NULL;
-
-            // --------------- analyze data
 
             Json::Value root;
             Json::Reader reader;
@@ -69,7 +59,7 @@ void ForecastAPI::make_post_request(const char *url,
                 cout << "Error parsing the string" << endl;
             }
             const Json::Value convertedCitiesArray = root["list"];
-
+            errorCode = std::stoi(root["cod"].asString());
             for (int index = 0; index < (int)convertedCitiesArray.size(); ++index)
             {
                 try
@@ -83,7 +73,7 @@ void ForecastAPI::make_post_request(const char *url,
                     _vec.push_back(convertedCitiesArray[index]["weather"][0]["icon"].asString());        // Index: 6
                     _vec.push_back(convertedCitiesArray[index]["main"]["humidity"].asString());          // Index: 7
                     _vec.push_back(convertedCitiesArray[index]["clouds"]["all"].asString());             // Index: 8
-                 
+                    _vec.push_back(root["city"]["id"].asString());                                       // Index: 9
 
                     map_result.insert(
                         std::pair<std::string, std::vector<std::string>>(convertedCitiesArray[index]["dt"].asString(), _vec));
@@ -98,6 +88,7 @@ void ForecastAPI::make_post_request(const char *url,
         }
         catch (...)
         {
+            errorCode = int(CONNECTION_FAILED);
         }
     }
 }

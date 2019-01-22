@@ -17,23 +17,45 @@ TEST(DatabaseTest, RunQuery_1)
 TEST(ConnectivityTest, ConnectServer_1)
 {
     std::string url;
-    int testCityId = 112931;
+    int testCityId = 112931; /* valid ID */
+    int errorCode;
     Constants *c = Constants::getInstance();
     ForecastAPI *api = new ForecastAPI();
     std::map<std::string, std::vector<std::string>> resultMap;
     c->get_url_by_city_id(url, testCityId);
-    api->make_post_request(url.c_str(), resultMap);
+    api->make_post_request(url.c_str(), resultMap, errorCode);
 
-    // for (auto const& it : resultMap)
-    // {
-        
-    //     ASSERT_TRUE(std::stoi(it.second[9])==testCityId);
-    // }
-
-    ASSERT_TRUE(resultMap.size()>0);
-    
-    
+    for (auto const &it : resultMap)
+    {
+        ASSERT_TRUE(std::stoi(it.second[9]) == testCityId);
+    }
+    EXPECT_EQ(errorCode, int(CONNECTION_OK));
 }
+TEST(ConnectivityTest, InvalidCityId_1) /* Test if the unknown city id is being handled */
+{
+    std::string url;
+    int testCityId = 11293;
+    int errorCode;
+    Constants *c = Constants::getInstance();
+    ForecastAPI *api = new ForecastAPI();
+    std::map<std::string, std::vector<std::string>> resultMap;
+    c->get_url_by_city_id(url, testCityId);
+    api->make_post_request(url.c_str(), resultMap, errorCode);
+    EXPECT_EQ(errorCode, int(CONNECTION_ADDRESS_NOT_FOUND));
+}
+TEST(ConnectivityTest, NoInternet_1) /* Disconnect internet, this test should be successful then */
+{
+    std::string url;
+    int testCityId = 11293;
+    int errorCode;
+    Constants *c = Constants::getInstance();
+    ForecastAPI *api = new ForecastAPI();
+    std::map<std::string, std::vector<std::string>> resultMap;
+    c->get_url_by_city_id(url, testCityId);
+    api->make_post_request(url.c_str(), resultMap, errorCode);
+    EXPECT_EQ(errorCode, int(CONNECTION_FAILED));
+}
+
 int main(int argc, char **argv)
 {
     testing::InitGoogleTest(&argc, argv);

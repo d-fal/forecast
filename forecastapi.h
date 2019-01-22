@@ -13,7 +13,8 @@ public:
   ForecastAPI();
   void make_post_request(MainApp *instance, const char *url);
   void make_post_request(const char *url,
-                         std::map<std::string, std::vector<std::string>> &map_result);
+                         std::map<std::string, std::vector<std::string>> &map_result,
+                         int &errorCode);
   static size_t write_response(void *ptr, size_t size, size_t nmemb, std::string *data);
 
 private:
