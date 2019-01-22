@@ -10,16 +10,11 @@
 using namespace std;
 Canvas::Canvas()
 {
-  set_base_colors();
-  set_size_request(600, 400);
+  set_size_request(CANVAS_WIDTH, CANVAS_HEIGHT);
 }
 Canvas::Canvas(std::map<std::string, std::vector<std::string>> &map_, int id, const std::string &name)
-    : forecastWatchWindow(7.0),
-      animation_position(20),
-      isBusy(false)
 {
-  set_base_colors();
-  set_size_request(600, 400);
+  set_size_request(CANVAS_WIDTH, CANVAS_HEIGHT);
   city_id = id;
   map_result = map_;
   cityName = name;
@@ -80,7 +75,6 @@ void Canvas::draw_grid(const Cairo::RefPtr<Cairo::Context> &cr, int width, int h
   int pos_cloudiness = pos_center + 70;
   char dateString[50];
   int samplesCount = 1;
-
   rgbRed = {.red = .9,
             .green = 0,
             .blue = 0};
@@ -88,8 +82,6 @@ void Canvas::draw_grid(const Cairo::RefPtr<Cairo::Context> &cr, int width, int h
   rgbBlue = {.red = .1,
              .green = 0,
              .blue = .9};
-
-  isBusy = true;
   Constants::getInstance()->get_standard_resource_width(standardImageWidth);
   for (auto const &it : map_result)
   {
@@ -161,7 +153,6 @@ void Canvas::draw_grid(const Cairo::RefPtr<Cairo::Context> &cr, int width, int h
       // index out of range
     }
   }
-  isBusy = false;
 }
 
 void Canvas::set_animation_param(const int &offset)
@@ -237,29 +228,10 @@ Point Canvas::rotate(Point p, double deg)
   return p_Prime;
 }
 
-void Canvas::set_base_colors()
-{
-
-  // ..............
-  map_ActualWeatherInWindow.insert(pair<int, std::string>(0, "rainy"));
-  map_ActualWeatherInWindow.insert(pair<int, std::string>(1, "cloudy"));
-  map_ActualWeatherInWindow.insert(pair<int, std::string>(2, "rainy"));
-  map_ActualWeatherInWindow.insert(pair<int, std::string>(3, "sunny"));
-  map_ActualWeatherInWindow.insert(pair<int, std::string>(4, "snowy"));
-  map_ActualWeatherInWindow.insert(pair<int, std::string>(5, "rainy"));
-  map_ActualWeatherInWindow.insert(pair<int, std::string>(6, "windy"));
-
-  map_WeatherThemes = Constants::getInstance()->get_map_of_weather_theme_colors();
-}
 
 void Canvas::get_contrast_color(const GdkRGBA &rgbMap, GdkRGBA &rgbaInstance)
 {
   rgbaInstance.red = 1.f - rgbMap.red;
   rgbaInstance.blue = 1.f - rgbMap.blue;
   rgbaInstance.green = 0;
-}
-
-bool Canvas::check_is_available()
-{
-  return !isBusy;
 }

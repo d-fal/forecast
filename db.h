@@ -1,3 +1,7 @@
+/**
+ * Database class. In order to maintain singleton paradigm in accessing an instance of database by all the 
+ * stakeholder classes, getInstance() method is defined and used allover the code.
+ * */ 
 #ifndef DB_H
 #define DB_H
 #define UNINTIALIZED_INSTANCE 0
