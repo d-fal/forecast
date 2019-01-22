@@ -1,4 +1,4 @@
-# Weather Forecast Application
+# Weather Forecast Application [![Build Status](https://api.travis-ci.org/google/googletest.svg?branch=master)](https://travis-ci.org/google/googletest)
 This is a demo gtkmm-based weather forecast application
 
 
@@ -12,6 +12,7 @@ We are using five days forecast service offered by openweathermap in which it pr
 * [x] Sqlite3 ,a mere lightweight database, is the backbone of datastorage in the app.
 * [x] GTK3 v22 is used.
 * [ ] GTK4 is not supported.
+* [x] Google unit testing.
 
 ## Dependencies
 Before compiling the project, make sure the following packages have been already installed on your machine.
