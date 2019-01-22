@@ -61,8 +61,11 @@ public:
   void set_show_all_data_consent(bool status);
 
   TemperatureSystems get_chosen_temprature();
-  void convert_temperature(std::string temp, int &converetdTemp);
-  void set_temprature(TemperatureSystems temp);
+  void map_temperature_system(const float &temp, int &convertedTemp, const TemperatureSystems &system);
+  void convert_temperature(std::string temp, int &converetdTemp,const TemperatureSystems &system);
+  void convert_temperature(float &temp, int &convertedTemp,const TemperatureSystems &system);
+  
+  void set_temperature_system(TemperatureSystems temp);
   std::string get_selected_temperature_symbol();
 };
 

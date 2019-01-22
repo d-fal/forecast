@@ -42,7 +42,7 @@ void Settings::on_check_auto_update_clicked()
     Constants::getInstance()->set_dynamic_update_status(m_checkAutoUpdate.get_active());
 
     if (r_celcius.get_active())
-        Constants::getInstance()->set_temprature(CELCIUS);
+        Constants::getInstance()->set_temperature_system(CELCIUS);
     if (r_fahrenheit.get_active())
-        Constants::getInstance()->set_temprature(FAHRENHEIT);
+        Constants::getInstance()->set_temperature_system(FAHRENHEIT);
 }

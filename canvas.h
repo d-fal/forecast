@@ -7,14 +7,13 @@
 #include <gtkmm/drawingarea.h>
 #include <cairomm/context.h>
 #include <gdkmm/rgba.h>
-
 #include <vector>
 #include "constants.h"
 #include <string>
 #include <iostream>
 /**
  * This struct serves drawing purposes for Cairo context
- * */ 
+ * */
 struct Point
 {
   int x;
@@ -27,7 +26,7 @@ public:
    * Constructor. There are two ways to instantiate the Canvas. One can be injected the drawing information exactly when the class 
    * is being instantiated. The other way is to use @set_input_param method and instantiate empty context.
    * */
-  Canvas(std::map<std::string, std::vector<std::string>> &map_, int id, const std::string& name);
+  // Canvas(std::map<std::string, std::vector<std::string>> &map_, int id, const std::string &name);
   /**
    * Empty canvas, with defined size
    * */
@@ -40,7 +39,7 @@ public:
    * This method injects the temperature information to the canvas
    * Other way to do so, is passing the information map in the constructor.
    * */
-  void set_input_param(std::map<std::string, std::vector<std::string>> &map_, int id, const std::string& name);
+  void set_input_param(std::map<std::string, std::vector<std::string>> &_map, int id, const std::string &name);
   /**
    * This feature sets the animation parameter (The horizontal displacement of the icons)
    * */
@@ -49,7 +48,6 @@ public:
    * Redrawing the painted canvas
    * */
   void force_redraw();
-  
 
 protected:
   /* Override default signal handler */
@@ -66,7 +64,7 @@ protected:
    * */
   void draw_text(const Cairo::RefPtr<Cairo::Context> &cr, std::string message,
                  int x, int y, int font_size = 0);
-                   /**
+  /**
    * Drawing text in the defined position
    * @var const Cairo::RefPtr<Cairo::Context> &cr reference to the passed cairo context
    * @var int message, the text is deemed to be printed
@@ -100,18 +98,37 @@ protected:
                                  double rotation);
 
 private:
-/**
+  /**
  * Computing the contrasted version of every GdkRGBA
  * */
   void get_contrast_color(const GdkRGBA &rgbMap, GdkRGBA &rgbaInstance);
-  
-  std::map<int, std::string> map_ActualWeatherInWindow;
-  int animation_offset;
-  int city_id;
-  std::map<std::string, std::vector<std::string>> map_result;
-  
+
+  int animationOffset;
+  int cityId;
+  std::map<std::string, std::vector<std::string>> mapResult;
+
   std::string cityName;
-  GdkRGBA rgbRed, rgbBlue;
+  time_t rawtime;
+  struct tm *ptm;
+  char dateString[50];
+  int posCenter;
+  int lastPrintedDay;
+  int numberOfDaysToCover;
+  int incrementBy;
+  int standardImageWidth;
+  int posTemp;
+  int posTempMin;
+  int posTempMax;
+  int posWeatherCondition;
+  int posWeatherConditionDescription;
+  int posTriangleUp;
+  int posTriangleDown;
+  int posDate;
+  int posHumidity;
+  int posCityName;
+  int posCloudiness;
+  int xPos;
+  GdkRGBA rgbMap, rgbContrast, rgbRed, rgbBlue;
 };
 
 #endif // GTKMM_EXAMPLE_Canvas_H

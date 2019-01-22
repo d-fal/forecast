@@ -1365,11 +1365,7 @@ canvas.o: canvas.cc /usr/include/stdc-predef.h canvas.h \
  /usr/include/gtkmm-3.0/gtkmm/uimanager.h \
  /usr/include/gtkmm-3.0/gtkmm/viewport.h \
  /usr/include/gtkmm-3.0/gtkmm/volumebutton.h commons.h \
- /usr/include/c++/7/iostream /usr/include/jsoncpp/json/json.h \
- /usr/include/jsoncpp/json/autolink.h /usr/include/jsoncpp/json/config.h \
- /usr/include/jsoncpp/json/version.h /usr/include/jsoncpp/json/value.h \
- /usr/include/jsoncpp/json/forwards.h /usr/include/jsoncpp/json/reader.h \
- /usr/include/jsoncpp/json/features.h /usr/include/jsoncpp/json/writer.h
+ /usr/include/c++/7/iostream
 
 /usr/include/stdc-predef.h:
 
@@ -4332,21 +4328,3 @@ constants.h:
 commons.h:
 
 /usr/include/c++/7/iostream:
-
-/usr/include/jsoncpp/json/json.h:
-
-/usr/include/jsoncpp/json/autolink.h:
-
-/usr/include/jsoncpp/json/config.h:
-
-/usr/include/jsoncpp/json/version.h:
-
-/usr/include/jsoncpp/json/value.h:
-
-/usr/include/jsoncpp/json/forwards.h:
-
-/usr/include/jsoncpp/json/reader.h:
-
-/usr/include/jsoncpp/json/features.h:
-
-/usr/include/jsoncpp/json/writer.h:

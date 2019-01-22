@@ -43,19 +43,48 @@ TEST(ConnectivityTest, InvalidCityId_1) /* Test if the unknown city id is being 
     api->make_post_request(url.c_str(), resultMap, errorCode);
     EXPECT_EQ(errorCode, int(CONNECTION_ADDRESS_NOT_FOUND));
 }
-TEST(ConnectivityTest, NoInternet_1) /* Disconnect internet, this test should be successful then */
-{
-    std::string url;
-    int testCityId = 11293;
-    int errorCode;
-    Constants *c = Constants::getInstance();
-    ForecastAPI *api = new ForecastAPI();
-    std::map<std::string, std::vector<std::string>> resultMap;
-    c->get_url_by_city_id(url, testCityId);
-    api->make_post_request(url.c_str(), resultMap, errorCode);
-    EXPECT_EQ(errorCode, int(CONNECTION_FAILED));
-}
+/* Disconnect internet and uncomment the following lines. 
+ * this test should be successful then */
+// TEST(ConnectivityTest, NoInternet_1) 
+// {
+//     std::string url;
+//     int testCityId = 11293;
+//     int errorCode;
+//     Constants *c = Constants::getInstance();
+//     ForecastAPI *api = new ForecastAPI();
+//     std::map<std::string, std::vector<std::string>> resultMap;
+//     c->get_url_by_city_id(url, testCityId);
+//     api->make_post_request(url.c_str(), resultMap, errorCode);
+//     EXPECT_EQ(errorCode, int(CONNECTION_FAILED));
+// }
 
+TEST(Conversion , CelciusToFahrenheitDefault)
+{
+    Constants *c = Constants::getInstance();
+    float temp = 18.f; //In celcius
+    int convertedTemp;
+    c->set_temperature_system(CELCIUS);
+    c->convert_temperature(temp,convertedTemp, CELCIUS);
+    EXPECT_EQ(convertedTemp,18);
+}
+TEST(Conversion , CelciusToFahrenheitSetCelcius)
+{
+    Constants *c = Constants::getInstance();
+    float temp = 273.f; //In celcius
+    int convertedTemp;
+    c->set_temperature_system(CELCIUS);
+    c->convert_temperature(temp, convertedTemp, KELVIN);
+    EXPECT_EQ(convertedTemp,0);
+}
+TEST(Conversion , CelciusToFahrenheitSetFahrenheit)
+{
+    Constants *c = Constants::getInstance();
+    float temp = 273.f; //In celcius
+    int convertedTemp;
+    c->set_temperature_system(FAHRENHEIT);
+    c->convert_temperature(temp, convertedTemp, KELVIN);
+    EXPECT_EQ(convertedTemp,32);
+}
 int main(int argc, char **argv)
 {
     testing::InitGoogleTest(&argc, argv);

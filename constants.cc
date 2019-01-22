@@ -104,19 +104,34 @@ Glib::RefPtr<Gdk::Pixbuf> Constants::get_image_pointer_by_keyword(std::string ke
     }
     return map_Images[keyword];
 }
-
+void Constants::map_temperature_system(const float &temp, int &convertedTemp, const TemperatureSystems &system)
+{
+    switch (system)
+    {
+    case FAHRENHEIT:
+        convertedTemp = int((temp - 32) * (5 / 9));
+        break;
+    case CELCIUS:
+        convertedTemp = int(temp);
+        break;
+    case KELVIN:
+        convertedTemp = int(temp- 273.f);
+        break;
+    default:
+        break;
+    }
+}
 void Constants::get_url_by_city_id(std::string &url, const int &id)
 {
     url = "https://api.openweathermap.org/data/2.5/forecast?id=" +
           std::to_string(id) +
           "&appid=" + apiKey;
 }
-void Constants::convert_temperature(std::string temp, int &convertedTemp)
+void Constants::convert_temperature(float &temp, int &convertedTemp, const TemperatureSystems &system)
 {
+    map_temperature_system(temp, convertedTemp, system);
     try
     {
-        float _temp = std::stof(temp);
-        convertedTemp = int(_temp - 273.f);
         switch (chosenTemperature)
         {
         case CELCIUS:
@@ -133,6 +148,11 @@ void Constants::convert_temperature(std::string temp, int &convertedTemp)
         std::exception_ptr p = std::current_exception();
         std::clog << (p ? p.__cxa_exception_type()->name() : "null") << std::endl;
     }
+}
+void Constants::convert_temperature(std::string temp, int &convertedTemp, const TemperatureSystems &system)
+{
+    float _temp = std::stof(temp);
+    convert_temperature(_temp, convertedTemp, system);
 }
 std::string Constants::get_selected_temperature_symbol()
 {
@@ -156,12 +176,12 @@ void Constants::get_standard_resource_width(int &width)
 
 bool Constants::get_dynamic_update_status()
 {
-    
+
     return dynamicUpdateContinue;
 }
 void Constants::set_dynamic_update_status(bool status)
 {
-    
+
     dynamicUpdateContinue = status;
 }
 
@@ -178,7 +198,7 @@ TemperatureSystems Constants::get_chosen_temprature()
 {
     return chosenTemperature;
 }
-void Constants::set_temprature(TemperatureSystems temp)
+void Constants::set_temperature_system(TemperatureSystems temp)
 {
     chosenTemperature = temp;
 }
