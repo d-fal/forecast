@@ -34,6 +34,6 @@ Now, you can run it by ```./forecast```
 
 ## Unit Test
 The main functionality of this application is tested by Google Unit Test framework. Database connection, query execution and
-api connection are subjected to test.
+api connection are subjected to test. [Testing guidelines](UnitTest.md)
 # Snapshot
 ![alt text](https://github.com/falahati1987/forecast/blob/master/demo.png)
