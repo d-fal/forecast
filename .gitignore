@@ -1,4 +1,5 @@
 forecast
+test
 *.compiled
 *.o
 *.json
