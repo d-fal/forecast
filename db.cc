@@ -2,7 +2,6 @@
 #include <stdio.h>
 #include <stdexcept>
 
-
 bool Db::isCitiesLoaded = true;
 std::map<std::string, std::string> Db::map_suggestions;
 
@@ -82,6 +81,14 @@ void Db::setup_db()
               "ID INTEGER PRIMARY KEY AUTOINCREMENT,"
               "city_id INTEGER UNIQUE, "
               "is_default BOOLEAN, "
+              "created_at DATETIME,  "
+              "FOREIGN kEY(city_id) REFERENCES Cities(ID) );");
+
+    rc = exec("CREATE TABLE IF NOT EXISTS temperature_history("
+              "ID INTEGER PRIMARY KEY AUTOINCREMENT,"
+              "city_id INTEGER UNIQUE, "
+              "temperature FLOAT, "
+              "sampled_at BIGINT, "
               "created_at DATETIME,  "
               "FOREIGN kEY(city_id) REFERENCES Cities(ID) );");
 
@@ -194,8 +201,7 @@ std::map<std::string, std::string> Db::select_picked_cities_from_db(const char *
             std::string(dbName) +
             " as A inner join Cities as B ON (A.city_id = B.id) order by B.name";
 
-
-    rc = sqlite3_exec(db, query.c_str(), callback,NULL, &zErrMsg);
+    rc = sqlite3_exec(db, query.c_str(), callback, NULL, &zErrMsg);
 
     if (rc != SQLITE_OK)
     {
@@ -210,7 +216,7 @@ void Db::delete_selected_city(int &id)
 {
     std::string query;
     query = "delete from Selected_Cities where city_id = " + std::to_string(id);
-    
+
     const char *data = "Deletion";
     /* Execute SQL statement */
     rc = sqlite3_exec(db, query.c_str(), NULL, (void *)data, &zErrMsg);

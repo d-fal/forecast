@@ -128,10 +128,14 @@ void MainApp::open_file_view(const Glib::RefPtr<Gio::File> &file)
 void MainApp::notify_update_map(std::map<std::string, std::vector<std::string>> map_result)
 {
   map_receivedWeatherConditions = map_result;
+  
   if (map_allCitiesConditions.find(cityId) == map_allCitiesConditions.end())
   {
     map_allCitiesConditions.insert(std::pair<int, std::map<std::string, std::vector<std::string>>>(cityId, map_result));
   }
+  /**
+   * The retrieved data would be stored in cache
+   * */
   if (map_result.size() > 0)
   {
 

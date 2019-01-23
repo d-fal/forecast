@@ -42,7 +42,6 @@ void Canvas::set_input_param(std::map<std::string, std::vector<std::string>> &_m
 }
 Canvas::~Canvas()
 {
-  delete ptm;
 }
 
 bool Canvas::on_draw(const Cairo::RefPtr<Cairo::Context> &cr)
