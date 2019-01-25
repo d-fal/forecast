@@ -27,6 +27,7 @@
 
 class MainApp;
 class Cities;
+class LogChart;
 
 class SkeletonApplication : public Gtk::Application
 {
@@ -49,8 +50,12 @@ private:
   void on_action_preferences();
   void on_action_quit();
   void on_add_city();
+  void on_view_log();
   bool on_focus_window(GdkEventWindowState *event);
+  
   Cities *c_Cities = nullptr;
+  LogChart *logChart = nullptr;
+
   Db *dbInstance = nullptr;
   Settings *settings = nullptr;
 };

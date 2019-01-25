@@ -24,8 +24,9 @@ public:
   void update_status(const char *statusName, bool status);
   static int callback(void *data, int argc, char **argv, char **azColName);
   void delete_selected_city(int &id);
+  void log_temperature(const int& cityId, const int& temp, const int& sampledTime);
 
-  // template <typename T>
+  
   std::map<std::string, std::string> select_from_db(
       const char *dbName,
       const char *params,

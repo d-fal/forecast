@@ -85,12 +85,12 @@ void Db::setup_db()
               "FOREIGN kEY(city_id) REFERENCES Cities(ID) );");
 
     rc = exec("CREATE TABLE IF NOT EXISTS temperature_history("
-              "ID INTEGER PRIMARY KEY AUTOINCREMENT,"
-              "city_id INTEGER UNIQUE, "
+              "city_id INTEGER, "
               "temperature FLOAT, "
               "sampled_at BIGINT, "
               "created_at DATETIME,  "
-              "FOREIGN kEY(city_id) REFERENCES Cities(ID) );");
+              "FOREIGN kEY(city_id) REFERENCES Cities(ID) , PRIMARY KEY(city_id, sampled_at) "
+              ");");
 
     rc = exec("INSERT OR IGNORE INTO Settings ("
               "ID,"
@@ -222,6 +222,25 @@ void Db::delete_selected_city(int &id)
     rc = sqlite3_exec(db, query.c_str(), NULL, (void *)data, &zErrMsg);
 
     if (rc != SQLITE_OK)
+    {
+        fprintf(stderr, "SQL error: %s\n", zErrMsg);
+        sqlite3_free(zErrMsg);
+    }
+}
+
+void Db::log_temperature(const int &cityId, const int &temp, const int &sampledTime)
+{
+    std::string query("INSERT OR REPLACE INTO temperature_history (city_id ,"
+                      " temperature, sampled_at, created_at) VALUES (?, ?, ?, datetime('now') )");
+    sqlite3_stmt *stmt;
+
+    sqlite3_prepare_v2(db, query.c_str(), -1, &stmt, nullptr);
+    sqlite3_bind_int(stmt, 1, cityId);
+    sqlite3_bind_double(stmt, 2, (float)temp);
+    sqlite3_bind_int64(stmt, 3, sampledTime);
+
+    rc = sqlite3_step(stmt);
+    if (rc != SQLITE_DONE)
     {
         fprintf(stderr, "SQL error: %s\n", zErrMsg);
         sqlite3_free(zErrMsg);

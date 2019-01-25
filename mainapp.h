@@ -48,6 +48,7 @@ public:
   void call_forecast_api(const std::string &name, const int &id);
   bool release_cache();
   void disable_animation(bool stat);
+  void store_temperature_sample(const int &id, const std::map<std::string, std::vector<std::string>> &map_result);
 
   class ModelColumns : public Gtk::TreeModel::ColumnRecord
   {

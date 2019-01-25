@@ -8,9 +8,14 @@
         <attribute name="action">app.add_city</attribute>
       </item>
       <item>
+        <attribute name="label" translatable="yes">View log</attribute>
+        <attribute name="action">app.view_log</attribute>
+      </item>
+      <item>
         <attribute name="label" translatable="yes">Settings</attribute>
         <attribute name="action">app.preferences</attribute>
       </item>
+      
     </section>
     <section>
       <item>

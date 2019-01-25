@@ -17,11 +17,10 @@
  */
 
 #include "skeleteonapplication.h"
-
 #include <iostream>
 #include <exception>
-
 #include "cities.h"
+#include "log_chart.h"
 
 SkeletonApplication::SkeletonApplication()
     : Gtk::Application("ir.youconnect.forecast.application", Gio::APPLICATION_HANDLES_OPEN)
@@ -66,9 +65,11 @@ void SkeletonApplication::on_startup()
   // Add actions and keyboard accelerators for the application menu.
   add_action("preferences", sigc::mem_fun(*this, &SkeletonApplication::on_action_preferences));
   add_action("add_city", sigc::mem_fun(*this, &SkeletonApplication::on_add_city));
+  add_action("view_log", sigc::mem_fun(*this, &SkeletonApplication::on_view_log));
   add_action("quit", sigc::mem_fun(*this, &SkeletonApplication::on_action_quit));
   set_accel_for_action("app.quit", "<Ctrl>Q");
   set_accel_for_action("app.add_city", "<Ctrl>A");
+  set_accel_for_action("app.view_log", "<Ctrl>L");
 
   auto refBuilder = Gtk::Builder::create();
   try
@@ -197,4 +198,10 @@ bool SkeletonApplication::on_focus_window(GdkEventWindowState *event)
     }
   }
   return false;
+}
+
+void SkeletonApplication::on_view_log()
+{
+  logChart = new LogChart();
+  logChart->show();
 }

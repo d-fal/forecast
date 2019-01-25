@@ -1,7 +1,7 @@
 CC ?= gcc
 CXX ?= g++
 PROGRAM = forecast
-CXXFILES = main.cc constants.cc mainapp.cc skeletonapplication.cc jsonparser.cc settings.cc cities.cc db.cc canvas.cc treeview_withpopup.cc forecastapi.cc
+CXXFILES = main.cc constants.cc mainapp.cc skeletonapplication.cc jsonparser.cc settings.cc cities.cc db.cc canvas.cc treeview_withpopup.cc forecastapi.cc log_chart.cc
 BUILT_SRC = resources.c
 OBJS = $(BUILT_SRC:.c=.o) $(CXXFILES:.cc=.o)
 DEPDIR = .deps

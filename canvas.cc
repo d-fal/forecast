@@ -74,11 +74,11 @@ void Canvas::draw_grid(const Cairo::RefPtr<Cairo::Context> &cr, int width, int h
   {
     try
     {
-      rawtime = (time_t)std::stoi(it.second[0]);
+      rawtime = (time_t)std::stoi(it.second[TIME_INDEX]);
       ptm = localtime(&rawtime);
-      Constants::getInstance()->convert_temperature(it.second[3], tempMax, KELVIN);
-      Constants::getInstance()->convert_temperature(it.second[2], tempMin, KELVIN);
-      Constants::getInstance()->convert_temperature(it.second[1], temp, KELVIN);
+      Constants::getInstance()->convert_temperature(it.second[TEMPERATURE_MAX_INDEX], tempMax, KELVIN);
+      Constants::getInstance()->convert_temperature(it.second[TEMPERATURE_MIN_INDEX], tempMin, KELVIN);
+      Constants::getInstance()->convert_temperature(it.second[TEMPERATURE_INDEX], temp, KELVIN);
       _temp += temp;
       _tempMax = tempMax > _tempMax ? tempMax : _tempMax;
       _tempMin = tempMin < _tempMin ? tempMin : _tempMin;
@@ -87,7 +87,7 @@ void Canvas::draw_grid(const Cairo::RefPtr<Cairo::Context> &cr, int width, int h
         continue;
 
       cr->rectangle(xPos, 0, incrementBy - 1, height);
-      rgbMap = Constants::getInstance()->get_map_of_weather_theme_colors(it.second[6]);
+      rgbMap = Constants::getInstance()->get_map_of_weather_theme_colors(it.second[WEATHER_ICON_INDEX]);
       get_contrast_color(rgbMap, rgbContrast);
       cr->set_source_rgba(rgbMap.red, rgbMap.green, rgbMap.blue, .3);
       cr->fill();
@@ -95,8 +95,8 @@ void Canvas::draw_grid(const Cairo::RefPtr<Cairo::Context> &cr, int width, int h
       * Contrast text color */
 
       cr->set_source_rgba(rgbContrast.red, rgbContrast.green, rgbContrast.blue, 1);
-      draw_text(cr, it.second[4], xPos + incrementBy / 2, posWeatherCondition, 14);
-      draw_text(cr, it.second[5], xPos + incrementBy / 2, posWeatherConditionDescription, 8);
+      draw_text(cr, it.second[WEATHER_CONDITION_INDEX], xPos + incrementBy / 2, posWeatherCondition, 14);
+      draw_text(cr, it.second[WEATHER_DESCRIPTION_INDEX], xPos + incrementBy / 2, posWeatherConditionDescription, 8);
 
       draw_text(cr, std::to_string(_temp / samplesCount) + Constants::getInstance()->get_selected_temperature_symbol(),
                 xPos + incrementBy / 2, posTemp, 16);
@@ -106,8 +106,8 @@ void Canvas::draw_grid(const Cairo::RefPtr<Cairo::Context> &cr, int width, int h
       strftime(dateString, 50, "%a, %d %b", ptm);
       draw_text(cr, dateString, xPos + incrementBy / 2, posDate, 12);
 
-      draw_text(cr, "Humidity: " + it.second[7] + "%", xPos + incrementBy / 2, posHumidity, 12);
-      draw_text(cr, "Cloudiness: " + it.second[8] + "%", xPos + incrementBy / 2, posCloudiness, 10);
+      draw_text(cr, "Humidity: " + it.second[HUMIDITY_INDEX] + "%", xPos + incrementBy / 2, posHumidity, 12);
+      draw_text(cr, "Cloudiness: " + it.second[CLOUDINESS_INDEX] + "%", xPos + incrementBy / 2, posCloudiness, 10);
       draw_text(cr, cityName, width / 2, posCityName, 20);
 
       cr->set_source_rgba(rgbRed.red, rgbRed.green, rgbRed.blue, .9);

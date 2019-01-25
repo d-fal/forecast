@@ -128,14 +128,16 @@ void MainApp::open_file_view(const Glib::RefPtr<Gio::File> &file)
 void MainApp::notify_update_map(std::map<std::string, std::vector<std::string>> map_result)
 {
   map_receivedWeatherConditions = map_result;
-  
+
   if (map_allCitiesConditions.find(cityId) == map_allCitiesConditions.end())
   {
-    map_allCitiesConditions.insert(std::pair<int, std::map<std::string, std::vector<std::string>>>(cityId, map_result));
-  }
-  /**
+    /**
    * The retrieved data would be stored in cache
    * */
+    map_allCitiesConditions.insert(std::pair<int, std::map<std::string, std::vector<std::string>>>(cityId, map_result));
+    store_temperature_sample(cityId, map_result);
+  }
+
   if (map_result.size() > 0)
   {
 
@@ -262,6 +264,17 @@ void MainApp::call_forecast_api(const std::string &name, const int &id)
         });
   }
 }
+/**
+ * Store sampled date in db
+ * */
+void MainApp::store_temperature_sample(const int &id, const std::map<std::string, std::vector<std::string>> &samplesMap)
+{
+  int _temp = std::stoi(samplesMap.begin()->second[TEMPERATURE_INDEX]);
+  int _tm = std::stoi(samplesMap.begin()->second[TIME_INDEX]);
+  dbInstance->log_temperature(id, _temp, _tm);
+
+}
+
 /**
  * Cache will be cleared through calling this method
  * */
