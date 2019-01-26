@@ -1,8 +1,7 @@
 #ifndef GTKMM_EXAMPLE_CANVAS_H
 #define GTKMM_EXAMPLE_CANVAS_H
 
-#define CANVAS_WIDTH 600
-#define CANVAS_HEIGHT 400
+
 #define TRIANGLE_EDGE_LENGTH 10
 #include <gtkmm/drawingarea.h>
 #include <cairomm/context.h>
@@ -11,14 +10,8 @@
 #include "constants.h"
 #include <string>
 #include <iostream>
-/**
- * This struct serves drawing purposes for Cairo context
- * */
-struct Point
-{
-  int x;
-  int y;
-};
+#include "commons.h"
+
 class Canvas : public Gtk::DrawingArea
 {
 public:

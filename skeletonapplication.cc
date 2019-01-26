@@ -202,6 +202,6 @@ bool SkeletonApplication::on_focus_window(GdkEventWindowState *event)
 
 void SkeletonApplication::on_view_log()
 {
-  logChart = new LogChart();
-  logChart->show();
+  historyViewer = new HistoryViewver();
+  historyViewer->show();
 }

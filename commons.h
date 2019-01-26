@@ -3,29 +3,30 @@
 #define FAHRENHEIT_CODE 10
 #define CELCIUS_CODE 20
 #define KELVIN_CODE 30
+#define CANVAS_WIDTH 600
+#define CANVAS_HEIGHT 400
+
 enum TemperatureSystems
 {
   FAHRENHEIT = FAHRENHEIT_CODE,
   CELCIUS = CELCIUS_CODE,
   KELVIN = KELVIN_CODE
 };
-                                      
+
 enum APIIndicies
 {
   TIME_INDEX = 0,
-  TEMPERATURE_INDEX=1,
-  TEMPERATURE_MIN_INDEX=2,
-  TEMPERATURE_MAX_INDEX=3,
-  WEATHER_CONDITION_INDEX=4,
-  WEATHER_DESCRIPTION_INDEX=5,
-  WEATHER_ICON_INDEX=6,
-  HUMIDITY_INDEX=7,
+  TEMPERATURE_INDEX = 1,
+  TEMPERATURE_MIN_INDEX = 2,
+  TEMPERATURE_MAX_INDEX = 3,
+  WEATHER_CONDITION_INDEX = 4,
+  WEATHER_DESCRIPTION_INDEX = 5,
+  WEATHER_ICON_INDEX = 6,
+  HUMIDITY_INDEX = 7,
   CLOUDINESS_INDEX = 8,
   CITY_ID_INDEX = 9
 
-
 };
-
 
 enum ErrorCodes
 {
@@ -36,5 +37,14 @@ enum ErrorCodes
   CONNECTION_FAILED = -1,
   CONNECTION_OK = 200,
   CONNECTION_ADDRESS_NOT_FOUND = 404,
+};
+
+/**
+ * This struct serves drawing purposes for Cairo context
+ * */
+struct Point
+{
+  int x;
+  int y;
 };
 #endif // H_COMMONS

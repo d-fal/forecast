@@ -34,6 +34,7 @@ int Db::callback_get_settings(void *data, int argc, char **argv, char **azColNam
 
 int Db::callback(void *data, int argc, char **argv, char **azColName)
 {
+
     int i;
     for (i = 0; i < argc; i++)
     {
@@ -42,6 +43,17 @@ int Db::callback(void *data, int argc, char **argv, char **azColName)
                                                                             " | " +
                                                                             std::string(argv[i + 2])));
         i += 2; // We put 2 items in a row
+    }
+    return 0;
+}
+int Db::callback_get_history(void *data, int argc, char **argv, char **azColName)
+{
+    int i;
+    
+    for (i = 0; i < argc; i++)
+    {
+        map_suggestions.insert(std::make_pair<std::string, std::string>(argv[i], argv[i+1]));
+        i++; // We put 2 items in a row
     }
     return 0;
 }
@@ -245,4 +257,26 @@ void Db::log_temperature(const int &cityId, const int &temp, const int &sampledT
         fprintf(stderr, "SQL error: %s\n", zErrMsg);
         sqlite3_free(zErrMsg);
     }
+}
+/**
+ * 
+ * 
+ * */
+std::map<std::string, std::string> Db::get_temperature_history(const int &cityId, const int &startAt)
+{
+    map_suggestions.clear();
+
+    std::string query;
+    query = "SELECT  sampled_at, temperature from temperature_history "
+            " where city_id= " +
+            std::to_string(cityId) + " and sampled_at > " + std::to_string(startAt) + " order by sampled_at asc;";
+
+    rc = sqlite3_exec(db, query.c_str(), callback_get_history, NULL, &zErrMsg);
+
+    if (rc != SQLITE_OK)
+    {
+        fprintf(stderr, "SQL error: %s\n", zErrMsg);
+        sqlite3_free(zErrMsg);
+    }
+    return map_suggestions;
 }

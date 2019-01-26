@@ -24,10 +24,11 @@
 #include "mainapp.h"
 #include "db.h"
 #include "settings.h"
+#include "history_viewer.h"
 
 class MainApp;
 class Cities;
-class LogChart;
+class HistoryViewver;
 
 class SkeletonApplication : public Gtk::Application
 {
@@ -54,10 +55,9 @@ private:
   bool on_focus_window(GdkEventWindowState *event);
   
   Cities *c_Cities = nullptr;
-  LogChart *logChart = nullptr;
-
   Db *dbInstance = nullptr;
   Settings *settings = nullptr;
+  HistoryViewver *historyViewer = nullptr;
 };
 
 #endif /* SKELETON_APPLICATION_H */
