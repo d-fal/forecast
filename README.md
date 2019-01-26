@@ -37,3 +37,4 @@ The main functionality of this application is tested by Google Unit Test framewo
 api connection are subjected to test. [Testing guidelines](UnitTest.md)
 # Snapshot
 ![alt text](https://github.com/falahati1987/forecast/blob/master/demo.png)
+![alt text](https://github.com/falahati1987/forecast/blob/master/logger.png)
