@@ -16,7 +16,7 @@ class LogChart : public Gtk::DrawingArea
      * Destructor */
     ~LogChart();
    
-    void set_logger_data(std::map<std::string, std::string> &_log,  std::string &name);
+    void set_logger_data(std::map<std::string, std::string> &_log,  std::string &name, const int &s);
 
     /**
    * Redrawing the painted canvas
@@ -61,6 +61,7 @@ class LogChart : public Gtk::DrawingArea
     struct tm *ptm;
     char dateString[50];
     std::string cityName;
+    int scale;
 };
 
 #endif // TEMP_LOG_CHART

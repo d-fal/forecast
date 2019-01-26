@@ -1,6 +1,6 @@
 #include "log_chart.h"
 
-LogChart::LogChart()
+LogChart::LogChart() 
 {
     set_size_request(CANVAS_WIDTH, CANVAS_HEIGHT);
 
@@ -22,18 +22,19 @@ bool LogChart::on_draw(const Cairo::RefPtr<Cairo::Context> &cr)
 
 void LogChart::draw_grid(const Cairo::RefPtr<Cairo::Context> &cr, int width, int height)
 {
+   
     cr->set_line_width(.1);
     cr->set_source_rgba(.5, .4, .6, .7);
     cr->fill();
 
-    for (int i = -CANVAS_HEIGHT / 2; i < CANVAS_HEIGHT / 2; i += 20)
+    for (int i = -CANVAS_HEIGHT / (2*scale); i < CANVAS_HEIGHT / (2*scale); i += 10)
     {
-        cr->move_to(10, CANVAS_HEIGHT / 2 + i);
-        cr->line_to(CANVAS_WIDTH, CANVAS_HEIGHT / 2 + i);
+        cr->move_to(10, CANVAS_HEIGHT / 2 + scale*i );
+        cr->line_to(CANVAS_WIDTH, CANVAS_HEIGHT / 2 + scale*i);
         cr->stroke_preserve();
         draw_text(cr, std::to_string(-i) + Constants::getInstance()->get_selected_temperature_symbol(),
                   CANVAS_WIDTH - 15,
-                  CANVAS_HEIGHT / 2 + i - 5,
+                  CANVAS_HEIGHT / 2 + scale*i - 5,
                   9);
     }
 
@@ -42,7 +43,7 @@ void LogChart::draw_grid(const Cairo::RefPtr<Cairo::Context> &cr, int width, int
 void LogChart::draw_temperature_log(const Cairo::RefPtr<Cairo::Context> &cr)
 {
 
-    int temp, startOffsetX, samplesCount = logData.size(), windowWidth = 0, _time, lastPrintedDateX = 0;
+    int temp, startOffsetX, windowWidth = 0, _time, lastPrintedDateX = 0;
     if (logData.size() == 0)
         return;
     cr->set_source_rgba(.9, .4, .2, 1);
@@ -66,7 +67,7 @@ void LogChart::draw_temperature_log(const Cairo::RefPtr<Cairo::Context> &cr)
         rawtime = (time_t)_time;
         ptm = localtime(&rawtime);
         endPoint.x = (_time - startOffsetX) * ((CANVAS_WIDTH - 50) / (double)(windowWidth));
-        endPoint.y = CANVAS_HEIGHT / 2 - temp;
+        endPoint.y = CANVAS_HEIGHT / 2 - scale*(temp);
         if (step > 1 && (endPoint.x - lastPrintedDateX) > 50)
         {
             strftime(dateString, 50, "%d-%m-%y", ptm);
@@ -106,10 +107,11 @@ void LogChart::draw_text(const Cairo::RefPtr<Cairo::Context> &cr, std::string me
     layout->show_in_cairo_context(cr);
 }
 
-void LogChart::set_logger_data(std::map<std::string, std::string> &_log, std::string &name)
+void LogChart::set_logger_data(std::map<std::string, std::string> &_log, std::string &name , const int &s)
 {
     logData = _log;
     cityName = name;
+    scale = s;
     force_redraw();
 }
 
